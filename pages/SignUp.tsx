@@ -8,10 +8,11 @@ const Login: React.FC = () => {
   const [passowrd, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [errMessage, setErrMessage] = useState<string>("");
   const router = useRouter();
 
-  const login: SignInAndSignUpFunction = (email, passowrd) => {
-    return auth.signInWithEmailAndPassword(email, passowrd);
+  const signup: SignInAndSignUpFunction = (email, passowrd) => {
+    return auth.createUserWithEmailAndPassword(email, passowrd);
   };
 
   const handleSubmit: HandleSubmit = async (e) => {
@@ -19,16 +20,25 @@ const Login: React.FC = () => {
     try {
       setError("");
       setLoading(true);
-      await login(email, passowrd)
+
+      await signup(email, passowrd)
         .then(() => {
+          setEmail("");
+          setPassword("");
           router.push("/");
         })
         .catch((err) => {
           setError(err.message);
-          console.log(err);
+          if (err.code === "auth/invalid-email") {
+            setErrMessage("Email Should be: example@example.com");
+          } else {
+            setErrMessage(err.message);
+          }
         });
     } catch {
-      setError("Faild to sign in");
+      setEmail("");
+      setPassword("");
+      setError("Faild to sign Up");
     }
   };
   const handleEmailChange: HandleChange = (e) => {
@@ -40,8 +50,9 @@ const Login: React.FC = () => {
   return (
     <>
       <Head>
-        <title>Login</title>
+        <title>Sign Up</title>
       </Head>
+      <h1>Sign Up</h1>
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
@@ -59,8 +70,9 @@ const Login: React.FC = () => {
           onChange={handlePasswordChange}
           required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
+      {errMessage && <h2>{errMessage}</h2>}
     </>
   );
 };
