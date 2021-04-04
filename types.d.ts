@@ -40,3 +40,4 @@ type Admin = {
 };
 type HandleSubmit = (e: React.FormEvent<HTMLFormElement>) => void;
 type HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => void;
+type SignInAndSignUpFunction = (email: strign, password: stirng) => any;
