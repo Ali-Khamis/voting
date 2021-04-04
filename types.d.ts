@@ -1,3 +1,4 @@
+import React from "react";
 type Id = string;
 type AddMovieActionPayload = {
   id: string;

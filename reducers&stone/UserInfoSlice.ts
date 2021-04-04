@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { Movie, AddMovieAction } from "../types";
 let initialState: Movie[] = [];
-const UserInfoSlice = createSlice({
+const userInfoSlice = createSlice({
   name: "movies",
   initialState: initialState,
   reducers: {
@@ -18,5 +19,5 @@ const UserInfoSlice = createSlice({
     },
   },
 });
-export const { addMovieCase } = UserInfoSlice.actions;
-export default UserInfoSlice.reducer;
+export const { addMovieCase } = userInfoSlice.actions;
+export default userInfoSlice.reducer;
