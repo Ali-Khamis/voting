@@ -1,23 +1,38 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Movie, AddMovieAction } from "../types";
-let initialState: Movie[] = [];
-const userInfoSlice = createSlice({
+import { AddUserInfoPayload, InitialState, ToggleVotePayload } from "../types";
+let initialState: InitialState = {
+  userInfo: {
+    name: "",
+    id: "",
+    email: "",
+    emailVerified: false,
+    imageVotedId: "",
+  },
+  imagesInfo: [],
+};
+const userAndImagesInfoSlice = createSlice({
   name: "movies",
   initialState: initialState,
   reducers: {
-    addMovieCase: (state, { payload }: AddMovieAction) => {
-      return [
+    addUserInfo: (state, { payload }: AddUserInfoPayload) => {
+      return {
         ...state,
-        {
-          ...payload,
-          rate: 0,
-          usersRated: [],
-          timesRatedCounter: 0,
-          usersWatching: [],
-        },
-      ];
+        userInfo: { ...payload },
+      };
+    },
+    toggleVote: (state, { payload }: ToggleVotePayload) => {
+      if (payload.imageVotedId === state.userInfo.imageVotedId) {
+        return {
+          ...state,
+          userInfo: { ...state.userInfo, imageVotedId: "" },
+        };
+      }
+      return {
+        ...state,
+        userInfo: { ...state.userInfo, imageVotedId: payload.imageVotedId },
+      };
     },
   },
 });
-export const { addMovieCase } = userInfoSlice.actions;
-export default userInfoSlice.reducer;
+export const { addUserInfo, toggleVote } = userAndImagesInfoSlice.actions;
+export default userAndImagesInfoSlice.reducer;
