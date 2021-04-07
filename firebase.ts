@@ -1,5 +1,7 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+require("firebase/firestore");
+
 let app: any = firebase;
 
 if (!firebase.apps.length) {
@@ -12,5 +14,8 @@ if (!firebase.apps.length) {
     appId: "1:511063811515:web:2c5e4d0028144d442e909e",
   });
 }
+
+export const db = firebase.firestore();
+export let provider = new firebase.auth.GoogleAuthProvider();
 export const auth = app.auth();
-export default app;
+// export default app;
