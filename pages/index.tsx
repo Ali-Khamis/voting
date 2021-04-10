@@ -1,65 +1,155 @@
 import Head from "next/head";
-import { auth } from "../firebase";
+import { db, auth } from "../firebase";
 import React, { useState, useEffect } from "react";
 import ImagesList from "../components/Imageslist";
 import { useDispatch, useSelector } from "react-redux";
 import { addUserInfo, toggleVote } from "../reducers&stone/UserInfoSlice";
-import { HandleImageClick, UserState } from "../types";
-export default function Home() {
+import {
+  HandleImageClick,
+  UserState,
+  VoteForDifferentImage,
+  VoteFunction,
+} from "../types";
+const Home = () => {
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [userName, setUserName] = useState<string>("");
-  const [userId, setUserId] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [emailVerified, setEmailVerified] = useState<boolean>(false);
-  let userLocalInfo: any = useSelector((state: UserState) => state);
+  const [imagesInfo, setImagesInfo] = useState<any[]>([]);
+  const localState: any = useSelector((state: UserState) => state);
+  const [totalVoters, setTotalVoters] = useState<number>(0);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (userName && userId && userEmail) {
-      dispatch(
-        addUserInfo({
-          name: userName,
-          id: userId,
-          email: userEmail,
-          emailVerified: emailVerified,
-          imageVotedId: "",
-        })
-      );
-    }
-  }, [userName, userId, userEmail, emailVerified]);
+    setTotalVoters(0);
+    let votersArr = [];
+    imagesInfo.forEach((imageInfo) => {
+      if (!localState.userInfo.imageVotedId) {
+        imageInfo.voters.forEach((voter) => {
+          if (voter === localState.userInfo.id) {
+            dispatch(
+              toggleVote({
+                imageVotedId: imageInfo.Id,
+              })
+            );
+          }
+        });
+      }
+
+      votersArr = [...votersArr, ...imageInfo.voters];
+    });
+    setTotalVoters(votersArr.length);
+  }, [imagesInfo]);
+
   auth.onAuthStateChanged((user) => {
     if (user) {
       setUserLoggedIn(true);
       setLoading(false);
-      if (userLocalInfo.id === undefined) {
-        setUserName(user.displayName);
-        setUserId(user.uid);
-        setUserEmail(user.email);
-        setEmailVerified(user.emailVerified);
+      if (!localState.userInfo.id) {
+        dispatch(
+          addUserInfo({
+            name: user.displayName,
+            id: user.uid,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            imageVotedId: "",
+          })
+        );
       }
     } else {
       setUserLoggedIn(false);
+      if (localState.userInfo.id) {
+        dispatch(
+          addUserInfo({
+            name: "",
+            id: "",
+            email: "",
+            emailVerified: false,
+            imageVotedId: "",
+          })
+        );
+      }
     }
   });
-  const handleImageClick: HandleImageClick = (id) => {
+  useEffect(() => {
+    if (!imagesInfo[0]) {
+      db.collection("Images").onSnapshot((snapshot) => {
+        setLoading(false);
+        setImagesInfo(snapshot.docs.map((image) => image.data()));
+      });
+    }
+    return () => {
+      if (!loading) {
+        setLoading(true);
+      }
+    };
+  }, [imagesInfo]);
+  const voteForImage: VoteFunction = (id) => {
     dispatch(
       toggleVote({
         imageVotedId: id,
       })
     );
+    db.collection("Images")
+      .doc(id)
+      .get()
+      .then((snapshot) => {
+        let voters = [];
+        voters = [...snapshot.data().voters, localState.userInfo.id];
+        db.collection("Images").doc(id).update({
+          voters,
+        });
+      });
   };
+  const unVoteForImage: VoteFunction = (id) => {
+    dispatch(
+      toggleVote({
+        imageVotedId: id,
+      })
+    );
+    db.collection("Images")
+      .doc(id)
+      .get()
+      .then((snapshot) => {
+        let voters = snapshot
+          .data()
+          .voters.filter((voter) => voter !== localState.userInfo.id);
+        db.collection("Images").doc(id).update({
+          voters,
+        });
+      });
+  };
+  const voteForDifferentImage: VoteForDifferentImage = (
+    oldImageId,
+    newImageId
+  ) => {
+    unVoteForImage(oldImageId);
+    voteForImage(newImageId);
+  };
+  const handleImageClick: HandleImageClick = (id) => {
+    if (!localState.userInfo.imageVotedId) {
+      voteForImage(id);
+    } else {
+      if (id === localState.userInfo.imageVotedId) {
+        unVoteForImage(id);
+      } else {
+        voteForDifferentImage(localState.userInfo.imageVotedId, id);
+      }
+    }
+  };
+
   return (
     <div>
       <Head>
         <title>Home</title>
       </Head>
-      {loading ? (
-        <h1>Loading...</h1>
-      ) : userLoggedIn ? (
+      {userLoggedIn ? (
         <>
           {" "}
           <main>
-            <ImagesList handleImageClick={handleImageClick} />
+            <ImagesList
+              handleImageClick={handleImageClick}
+              imagesInfo={imagesInfo}
+              totalVoters={totalVoters}
+              localState={localState}
+            />
           </main>
           <footer>
             <h1>Contact us</h1>
@@ -71,4 +161,5 @@ export default function Home() {
       )}
     </div>
   );
-}
+};
+export default Home;

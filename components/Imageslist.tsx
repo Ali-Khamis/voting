@@ -1,20 +1,13 @@
 import ImageListItem from "./ImageslistItem";
-import { db } from "../firebase";
-import React, { useState, useEffect } from "react";
-export interface ImagesListProps {
-  handleImageClick: (id: string) => void;
-}
+import React from "react";
+import { ImagesListProps } from "../types";
 
-const ImagesList: React.FC<ImagesListProps> = ({ handleImageClick }) => {
-  const [imagesInfo, setImagesInfo] = useState<[] | {}[]>([]);
-
-  useEffect(() => {
-    db.collection("Images")
-      .get()
-      .then((snapshot) => {
-        setImagesInfo(snapshot.docs);
-      });
-  }, []);
+const ImagesList: React.FC<ImagesListProps> = ({
+  handleImageClick,
+  imagesInfo,
+  totalVoters,
+  localState,
+}) => {
   return (
     <>
       <h1>ImagesList</h1>
@@ -22,8 +15,10 @@ const ImagesList: React.FC<ImagesListProps> = ({ handleImageClick }) => {
         return (
           <ImageListItem
             key={index}
-            imageInfo={imageInfo.data()}
+            imageInfo={imageInfo}
             handleImageClick={handleImageClick}
+            totalVoters={totalVoters}
+            localState={localState}
           />
         );
       })}

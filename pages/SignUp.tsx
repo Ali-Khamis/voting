@@ -2,7 +2,7 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import { HandleSubmit, HandleChange, SignInAndSignUpFunction } from "../types";
 import React, { useState } from "react";
-import { auth, provider } from "../firebase";
+import { auth } from "../firebase";
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [passowrd, setPassword] = useState<string>("");
@@ -47,23 +47,14 @@ const Login: React.FC = () => {
   const handlePasswordChange: HandleChange = (e) => {
     setPassword(e.target.value);
   };
-  const signUpWithGoogle = () => {
-    auth
-      .signInWithPopup(provider)
-      .then(() => {
-        router.push("/");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+
   return (
     <>
       <Head>
         <title>Sign Up</title>
       </Head>
       <h1>Sign Up</h1>
-      <button onClick={signUpWithGoogle}>Google</button>
+
       <form onSubmit={handleSubmit}>
         <label htmlFor="email">Email</label>
         <input
