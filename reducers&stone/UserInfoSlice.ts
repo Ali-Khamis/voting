@@ -32,7 +32,23 @@ const userAndImagesInfoSlice = createSlice({
         userInfo: { ...state.userInfo, imageVotedId: payload.imageVotedId },
       };
     },
+    removeUserInfo: (state, { payload }) => {
+      return {
+        userInfo: {
+          name: "",
+          id: "",
+          email: "",
+          emailVerified: false,
+          imageVotedId: "",
+        },
+        imagesInfo: [],
+      };
+    },
   },
 });
-export const { addUserInfo, toggleVote } = userAndImagesInfoSlice.actions;
+export const {
+  addUserInfo,
+  toggleVote,
+  removeUserInfo,
+} = userAndImagesInfoSlice.actions;
 export default userAndImagesInfoSlice.reducer;
