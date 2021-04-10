@@ -20,28 +20,26 @@ const Nav = () => {
   });
   const handleSignOut: HandleSignOut = () => {
     auth.signOut();
-    dispatch(removeUserInfo({}));
+    dispatch(removeUserInfo());
   };
   return (
     <nav className={navStyles.nav}>
-      <ul>
-        <li>
+      <ul className={navStyles.ul}>
+        <li className={navStyles.li}>
           <Link href="/">Home</Link>
         </li>
         {isUserLogged ? (
-          <>
-            <li>
-              <Link href="/Login" passHref>
-                <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
-              </Link>
-            </li>
-          </>
+          <li className={navStyles.li}>
+            <Link href="/Login" passHref>
+              <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
+            </Link>
+          </li>
         ) : (
           <>
-            <li>
+            <li className={navStyles.li}>
               <Link href="/Login">Login</Link>
             </li>
-            <li>
+            <li className={navStyles.li}>
               <Link href="/SignUp">SignUp</Link>
             </li>
           </>

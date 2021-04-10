@@ -4,9 +4,6 @@ import HandleSignOut from "../types";
 
 const SignOut = forwardRef(
   ({ onClick, href }: { onClick: any; href: string }, ref: any) => {
-    // console.log("ref: ", ref);
-    // console.log("onClick: ", onClick);
-
     return (
       <a href={href} onClick={onClick} ref={ref}>
         SignOut
