@@ -32,7 +32,7 @@ const userAndImagesInfoSlice = createSlice({
         userInfo: { ...state.userInfo, imageVotedId: payload.imageVotedId },
       };
     },
-    removeUserInfo: (state, { payload }) => {
+    removeUserInfo: () => {
       return {
         userInfo: {
           name: "",

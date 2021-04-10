@@ -1,5 +1,6 @@
 import { ImageListItemProps } from "../types";
 import React from "react";
+import imageStyles from "../styles/ImagesListItem.module.css";
 
 const ImageListItem: React.FC<ImageListItemProps> = ({
   imageInfo,
@@ -11,17 +12,28 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
   if (totalVoters > 0) {
     votePresentage = Math.round((imageInfo.voters.length / totalVoters) * 100);
   }
+  // console.log(imageInfo.Id);
+  // console.log(localState.userInfo.imageVotedId);
 
   return (
-    <>
-      <h1>%{votePresentage}</h1>
-      <h1>{imageInfo.voters.length}</h1>
-      <img
-        onClick={() => handleImageClick(imageInfo.Id)}
-        src={imageInfo.ImageUrl}
-        alt="cute puppy"
-      />
-    </>
+    <div
+      className={imageStyles.container}
+      onClick={() => handleImageClick(imageInfo.Id)}
+    >
+      <div>
+        <img
+          width={300}
+          height={400}
+          className={imageStyles.img}
+          src={imageInfo.ImageUrl}
+          alt="cute puppy"
+        />
+      </div>
+      <div className={imageStyles.details}>
+        <h1>%{votePresentage}</h1>
+        <h1>voters: {imageInfo.voters.length}</h1>
+      </div>
+    </div>
   );
 };
 

@@ -1,0 +1,13 @@
+.container {
+  color: rgb(185, 164, 140);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.imagesContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 2rem;
+  margin: 2rem 0;
+}

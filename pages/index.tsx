@@ -10,6 +10,7 @@ import {
   VoteForDifferentImage,
   VoteFunction,
 } from "../types";
+import homeStyles from "../styles/Home.module.css";
 const Home = () => {
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
@@ -136,21 +137,21 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className={homeStyles.container}>
       <Head>
         <title>Home</title>
       </Head>
       {userLoggedIn ? (
         <>
           {" "}
-          <main>
+          <div className={homeStyles.container}>
             <ImagesList
               handleImageClick={handleImageClick}
               imagesInfo={imagesInfo}
               totalVoters={totalVoters}
               localState={localState}
             />
-          </main>
+          </div>
           <footer>
             <h1>Contact us</h1>
             <p>We will be happy to hear from you on +20 012G0T0H311 😊</p>
