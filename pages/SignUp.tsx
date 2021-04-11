@@ -6,6 +6,7 @@ import { auth } from "../firebase";
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [passowrd, setPassword] = useState<string>("");
+  const [name, setName] = useState<string>("");
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [errMessage, setErrMessage] = useState<string>("");
@@ -22,10 +23,13 @@ const Login: React.FC = () => {
       setLoading(true);
 
       await signup(email, passowrd)
-        .then(() => {
+        .then((result) => {
           setEmail("");
           setPassword("");
           router.push("/");
+          return result.user.updateProfile({
+            displayName: name,
+          });
         })
         .catch((err) => {
           setError(err.message);
@@ -47,7 +51,9 @@ const Login: React.FC = () => {
   const handlePasswordChange: HandleChange = (e) => {
     setPassword(e.target.value);
   };
-
+  const handleNameChange: HandleChange = (e) => {
+    setName(e.target.value);
+  };
   return (
     <>
       <Head>
@@ -56,7 +62,15 @@ const Login: React.FC = () => {
       <h1>Sign Up</h1>
 
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email</label>
+        <label htmlFor="name">Name: </label>
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleNameChange}
+          required
+        />
+        <label htmlFor="email">Email: </label>
         <input
           type="text"
           name="email"
@@ -64,7 +78,7 @@ const Login: React.FC = () => {
           onChange={handleEmailChange}
           required
         />
-        <label htmlFor="password">Password</label>
+        <label htmlFor="password">Password: </label>
         <input
           type="password"
           name="password"
