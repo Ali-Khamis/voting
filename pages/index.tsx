@@ -15,29 +15,12 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [imagesInfo, setImagesInfo] = useState<any[]>([]);
   const localState: any = useSelector((state: UserState) => state);
-  const [totalVoters, setTotalVoters] = useState<number>(0);
+  // const [totalVoters, setTotalVoters] = useState<number>(0);
   const dispatch = useDispatch();
-  useEffect(() => {
-    setTotalVoters(0);
-    let votersArr = [];
-    imagesInfo.forEach((imageInfo) => {
-      if (!localState.userInfo.imageVotedId) {
-        imageInfo.voters.forEach((voter) => {
-          if (voter === localState.userInfo.id) {
-            dispatch(
-              toggleVote({
-                imageVotedId: imageInfo.Id,
-              })
-            );
-          }
-        });
-      }
-
-      votersArr = [...votersArr, ...imageInfo.voters];
-    });
-    setTotalVoters(votersArr.length);
-  }, [imagesInfo]);
-
+  let totalVotersCount: number = imagesInfo.reduce((acc, cur) => {
+    return acc + cur.voters.length;
+  }, 0);
+  // @@@@@@@@@@@@@@@@@@@ 5osh el style branch yad ya ali @@@@@@@@@@@@@@@@@@@@@@@@@@
   auth.onAuthStateChanged((user) => {
     if (user) {
       setUserLoggedIn(true);
@@ -147,7 +130,7 @@ const Home = () => {
             <ImagesList
               handleImageClick={handleImageClick}
               imagesInfo={imagesInfo}
-              totalVoters={totalVoters}
+              totalVoters={totalVotersCount}
               localState={localState}
             />
           </main>
