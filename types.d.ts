@@ -3,6 +3,7 @@ import React from "react";
 type UserState = {
   name: string;
   id: string;
+  profileImgUrl: string;
   email: string;
   emailVerified: boolean;
   imageVotedId: string;
