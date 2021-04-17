@@ -23,31 +23,52 @@ const Nav = () => {
     dispatch(removeUserInfo());
   };
   return (
-    <nav className={navStyles.nav}>
-      <ul className={navStyles.ul}>
-        <li className={navStyles.li}>
-          <Link href="/">Home</Link>
-        </li>
+    <nav className={navStyles.container}>
+      <div className={navStyles.nav}>
         {isUserLogged ? (
-          <li className={navStyles.li}>
-            <Link href="/Login" passHref>
-              <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
-            </Link>
-          </li>
+          <div className={navStyles.userInfosContainer}>
+            {userLocalInfo.userInfo.profileImgUrl && (
+              <img
+                src={userLocalInfo.userInfo.profileImgUrl}
+                className={navStyles.profileImage}
+                alt="User profile picture"
+              />
+            )}
+
+            <div>
+              <p className={navStyles.userInfo}>
+                {userLocalInfo.userInfo.name}
+              </p>
+              <p className={navStyles.userInfo}>
+                {userLocalInfo.userInfo.email}
+              </p>
+            </div>
+          </div>
         ) : (
-          <>
-            <li className={navStyles.li}>
-              <Link href="/Login">Login</Link>
-            </li>
-            <li className={navStyles.li}>
-              <Link href="/SignUp">SignUp</Link>
-            </li>
-          </>
+          <div></div>
         )}
-      </ul>
-      <div>
-        <p>{userLocalInfo.userInfo.name}</p>
-        <p>{userLocalInfo.userInfo.email}</p>
+
+        <ul className={navStyles.ul}>
+          <li className={navStyles.li}>
+            <Link href="/">Home</Link>
+          </li>
+          {isUserLogged ? (
+            <li className={navStyles.li}>
+              <Link href="/Login" passHref>
+                <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
+              </Link>
+            </li>
+          ) : (
+            <>
+              <li className={navStyles.li}>
+                <Link href="/Login">Login</Link>
+              </li>
+              <li className={navStyles.li}>
+                <Link href="/SignUp">SignUp</Link>
+              </li>
+            </>
+          )}
+        </ul>
       </div>
     </nav>
   );

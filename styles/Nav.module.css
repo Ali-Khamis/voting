@@ -1,8 +1,33 @@
-.nav {
+.container {
   background: rgb(77, 76, 76);
+}
+.nav {
+  width: 90%;
+  margin: auto;
   color: white;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+}
+.userInfo {
+  color: rgb(153, 228, 199);
+  font-size: 1.2rem;
+}
+.userInfo::first-letter {
+  text-transform: uppercase;
+}
+.userInfosContainer {
+  display: flex;
+  align-items: center;
+}
+/* .profileImageContainer {
+  width: 4rem;
+  height: 4rem;
+} */
+.profileImage {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-right: 0.7rem;
+  border-radius: 50%;
 }
 .ul {
   display: flex;

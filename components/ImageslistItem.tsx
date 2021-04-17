@@ -1,5 +1,5 @@
 import { ImageListItemProps } from "../types";
-import React from "react";
+import React, { useEffect } from "react";
 import imageStyles from "../styles/ImagesListItem.module.css";
 
 const ImageListItem: React.FC<ImageListItemProps> = ({
@@ -12,8 +12,12 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
   if (totalVoters > 0) {
     votePresentage = Math.round((imageInfo.voters.length / totalVoters) * 100);
   }
-  // console.log(imageInfo.Id);
-  // console.log(localState.userInfo.imageVotedId);
+  let test = "";
+  useEffect(() => {
+    if (localState.userInfo.imageVotedId === imageInfo.Id) {
+      test = "voted";
+    }
+  }, [localState]);
 
   return (
     <div
@@ -33,6 +37,7 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
         <h1>%{votePresentage}</h1>
         <h1>voters: {imageInfo.voters.length}</h1>
       </div>
+      <h1>{test}</h1>
     </div>
   );
 };

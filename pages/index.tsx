@@ -16,12 +16,10 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [imagesInfo, setImagesInfo] = useState<any[]>([]);
   const localState: any = useSelector((state: UserState) => state);
-  // const [totalVoters, setTotalVoters] = useState<number>(0);
   const dispatch = useDispatch();
   let totalVotersCount: number = imagesInfo.reduce((acc, cur) => {
     return acc + cur.voters.length;
   }, 0);
-  // @@@@@@@@@@@@@@@@@@@ 5osh el style branch yad ya ali @@@@@@@@@@@@@@@@@@@@@@@@@@
   auth.onAuthStateChanged((user) => {
     if (user) {
       setUserLoggedIn(true);
@@ -31,6 +29,7 @@ const Home = () => {
           addUserInfo({
             name: user.displayName,
             id: user.uid,
+            profileImgUrl: user.photoURL,
             email: user.email,
             emailVerified: user.emailVerified,
             imageVotedId: "",
@@ -45,6 +44,7 @@ const Home = () => {
             name: "",
             id: "",
             email: "",
+            profileImgUrl: "",
             emailVerified: false,
             imageVotedId: "",
           })
@@ -65,6 +65,23 @@ const Home = () => {
       }
     };
   }, [imagesInfo]);
+  useEffect(() => {
+    db.collection("Images")
+      .get()
+      .then((images) => {
+        images.docs.forEach((image) => {
+          image.data().voters.forEach((voter) => {
+            if (localState.userInfo.id === voter) {
+              dispatch(
+                toggleVote({
+                  imageVotedId: image.data().Id,
+                })
+              );
+            }
+          });
+        });
+      });
+  }, [localState.userInfo.id]);
   const voteForImage: VoteFunction = (id) => {
     dispatch(
       toggleVote({
