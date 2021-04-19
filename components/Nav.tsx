@@ -1,5 +1,5 @@
 import navStyles from "../styles/Nav.module.css";
-import Link from "next/Link";
+import Link from "next/link";
 import { auth } from "../firebase";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
