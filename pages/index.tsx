@@ -11,17 +11,22 @@ import {
   VoteFunction,
 } from "../types";
 import homeStyles from "../styles/Home.module.css";
+import { useRouter } from "next/router";
+
 const Home = () => {
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [imagesInfo, setImagesInfo] = useState<any[]>([]);
   const localState: any = useSelector((state: UserState) => state);
   const dispatch = useDispatch();
+  const router = useRouter();
   let totalVotersCount: number = imagesInfo.reduce((acc, cur) => {
     return acc + cur.voters.length;
   }, 0);
   auth.onAuthStateChanged((user) => {
     if (user) {
+      // console.log(user);
+
       setUserLoggedIn(true);
       setLoading(false);
       if (!localState.userInfo.id) {
@@ -50,8 +55,10 @@ const Home = () => {
           })
         );
       }
+      // router.push("/Login");      WHYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
     }
   });
+
   useEffect(() => {
     if (!imagesInfo[0]) {
       db.collection("Images").onSnapshot((snapshot) => {

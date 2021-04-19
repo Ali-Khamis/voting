@@ -1,7 +1,9 @@
 .container {
   width: 100%;
   cursor: pointer;
-  border-radius: 8px;
+  /* border-radius: 8px; */
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   transition: 100ms;
   background: rgba(212, 212, 212);
 }
@@ -18,4 +20,40 @@
 
 .details {
   padding: 0 10px;
+}
+.voteButton {
+  width: 100%;
+  padding: 1rem;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: rgb(102, 101, 101);
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.voteButton:hover {
+  background: rgb(204, 182, 182);
+}
+.votedPuppyButton {
+  width: 100%;
+  padding: 1rem;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: rgb(204, 182, 182);
+}
+.voteButton:focus {
+  outline: none;
+}
+.imgContainer {
+  position: relative;
+}
+.cardDetails {
+  position: absolute;
+  bottom: 0;
+  color: red;
 }
