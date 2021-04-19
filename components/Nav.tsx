@@ -49,15 +49,17 @@ const Nav = () => {
         )}
 
         <ul className={navStyles.ul}>
-          <li className={navStyles.li}>
-            <Link href="/">Home</Link>
-          </li>
           {isUserLogged ? (
-            <li className={navStyles.li}>
-              <Link href="/Login" passHref>
-                <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
-              </Link>
-            </li>
+            <>
+              <li className={navStyles.li}>
+                <Link href="/">Home</Link>
+              </li>
+              <li className={navStyles.li}>
+                <Link href="/Login" passHref>
+                  <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
+                </Link>
+              </li>
+            </>
           ) : (
             <>
               <li className={navStyles.li}>
