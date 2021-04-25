@@ -1,7 +1,7 @@
 import { ImageListItemProps } from "../types";
 import React, { useEffect, useState } from "react";
 import imageStyles from "../styles/ImagesListItem.module.css";
-import Link from "next/Link";
+import Link from "next/link";
 
 const ImageListItem: React.FC<ImageListItemProps> = ({
   imageInfo,
@@ -40,9 +40,9 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
                 src={imageInfo.ImageUrl}
                 alt="cute puppy"
               />
-              {hovered && (
-                <div className={imageStyles.cardDetails}>Hovered</div>
-              )}
+              <div className={imageStyles.cardDetails}>
+                <span>For more information about the puppy click here </span>
+              </div>
             </div>
             <div className={imageStyles.details}>
               <h1>%{votePresentage}</h1>
@@ -58,8 +58,7 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
               : ` ${imageStyles.voteButton} ${imageStyles.votedPuppyButton}`
           }
         >
-          {" "}
-          Vote for the puppy
+          {voted ? "Unvote" : "Vote"}
         </button>
       </div>
     </>

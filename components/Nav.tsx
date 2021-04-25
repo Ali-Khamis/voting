@@ -1,23 +1,25 @@
 import navStyles from "../styles/Nav.module.css";
 import Link from "next/link";
 import { auth } from "../firebase";
-import { useState } from "react";
+// import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { UserState, HandleSignOut } from "../types";
 import { removeUserInfo } from "../reducers&stone/UserInfoSlice";
 import SignOut from "./SignOut";
 
 const Nav = () => {
-  const [isUserLogged, setIsUserLogged] = useState<boolean>(false);
+  // const [isUserLogged, setIsUserLogged] = useState<boolean>(false);
   const userLocalInfo: any = useSelector((state: UserState) => state);
+  console.log(userLocalInfo.userInfo);
+
   const dispatch = useDispatch();
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      setIsUserLogged(true);
-    } else {
-      setIsUserLogged(false);
-    }
-  });
+  // auth.onAuthStateChanged((user) => {
+  //   if (user) {
+  //     setIsUserLogged(true);
+  //   } else {
+  //     setIsUserLogged(false);
+  //   }
+  // });
   const handleSignOut: HandleSignOut = () => {
     auth.signOut();
     dispatch(removeUserInfo());
@@ -25,7 +27,7 @@ const Nav = () => {
   return (
     <nav className={navStyles.container}>
       <div className={navStyles.nav}>
-        {isUserLogged ? (
+        {userLocalInfo.userInfo.id ? (
           <div className={navStyles.userInfosContainer}>
             {userLocalInfo.userInfo.profileImgUrl && (
               <img
@@ -34,7 +36,6 @@ const Nav = () => {
                 alt="User profile picture"
               />
             )}
-
             <div>
               <p className={navStyles.userInfo}>
                 {userLocalInfo.userInfo.name}
@@ -47,9 +48,8 @@ const Nav = () => {
         ) : (
           <div></div>
         )}
-
         <ul className={navStyles.ul}>
-          {isUserLogged ? (
+          {userLocalInfo.userInfo.id ? (
             <>
               <li className={navStyles.li}>
                 <Link href="/">Home</Link>
@@ -75,5 +75,4 @@ const Nav = () => {
     </nav>
   );
 };
-
 export default Nav;

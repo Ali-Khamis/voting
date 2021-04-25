@@ -13,72 +13,78 @@ import {
 import homeStyles from "../styles/Home.module.css";
 import { useRouter } from "next/router";
 
-const Home = () => {
+const Home = ({ images }) => {
   const [userLoggedIn, setUserLoggedIn] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [imagesInfo, setImagesInfo] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [working, setWorking] = useState<boolean>(true);
+  const [imagesInfo, setImagesInfo] = useState<any[]>(images);
   const localState: any = useSelector((state: UserState) => state);
   const dispatch = useDispatch();
   const router = useRouter();
   let totalVotersCount: number = imagesInfo.reduce((acc, cur) => {
     return acc + cur.voters.length;
   }, 0);
-  auth.onAuthStateChanged((user) => {
-    if (user) {
-      // console.log(user);
-
-      setUserLoggedIn(true);
-      setLoading(false);
-      if (!localState.userInfo.id) {
-        dispatch(
-          addUserInfo({
-            name: user.displayName,
-            id: user.uid,
-            profileImgUrl: user.photoURL,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            imageVotedId: "",
-          })
-        );
-      }
-    } else {
-      setUserLoggedIn(false);
-      if (localState.userInfo.id) {
-        dispatch(
-          addUserInfo({
-            name: "",
-            id: "",
-            email: "",
-            profileImgUrl: "",
-            emailVerified: false,
-            imageVotedId: "",
-          })
-        );
-      }
-      // router.push("/Login");      WHYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY
-    }
-  });
+  // console.log(localState);
 
   useEffect(() => {
-    if (!imagesInfo[0]) {
+    setLoading(true);
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        // console.log(user);
+
+        setUserLoggedIn(true);
+        if (!localState.userInfo.id) {
+          dispatch(
+            addUserInfo({
+              name: user.displayName,
+              id: user.uid,
+              profileImgUrl: user.photoURL,
+              email: user.email,
+              emailVerified: user.emailVerified,
+              imageVotedId: "",
+            })
+          );
+        }
+      } else {
+        setUserLoggedIn(false);
+        if (localState.userInfo.id) {
+          dispatch(
+            addUserInfo({
+              name: "",
+              id: "",
+              email: "",
+              profileImgUrl: "",
+              emailVerified: false,
+              imageVotedId: "",
+            })
+          );
+        }
+        router.push("/Login");
+      }
+      setLoading(false);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (working) {
       db.collection("Images").onSnapshot((snapshot) => {
         setLoading(false);
         setImagesInfo(snapshot.docs.map((image) => image.data()));
       });
     }
-    return () => {
-      if (!loading) {
-        setLoading(true);
-      }
-    };
-  }, [imagesInfo]);
+    return () => setWorking(false);
+  }, []);
+
   useEffect(() => {
     db.collection("Images")
       .get()
       .then((images) => {
         images.docs.forEach((image) => {
           image.data().voters.forEach((voter) => {
-            if (localState.userInfo.id === voter) {
+            if (
+              localState.userInfo.id === voter &&
+              !localState.userInfo.imageVotedId
+            ) {
               dispatch(
                 toggleVote({
                   imageVotedId: image.data().Id,
@@ -89,6 +95,7 @@ const Home = () => {
         });
       });
   }, [localState.userInfo.id]);
+
   const voteForImage: VoteFunction = (id) => {
     dispatch(
       toggleVote({
@@ -145,6 +152,7 @@ const Home = () => {
 
   return (
     <div className={homeStyles.container}>
+      {loading && <h1>loading....</h1>}
       <Head>
         <title>Home</title>
       </Head>
@@ -171,3 +179,14 @@ const Home = () => {
   );
 };
 export default Home;
+
+export const getStaticProps = async () => {
+  let images;
+  await db
+    .collection("Images")
+    .get()
+    .then((snapshot) => {
+      images = snapshot.docs.map((image) => image.data());
+    });
+  return { props: { images } };
+};

@@ -1,7 +1,6 @@
 .container {
   width: 100%;
   cursor: pointer;
-  /* border-radius: 8px; */
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   transition: 100ms;
@@ -11,29 +10,30 @@
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.34);
   transform: scale(1.05);
 }
-
 .img {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   width: 100%;
+  height: 100%;
 }
-
 .details {
   padding: 0 10px;
 }
 .voteButton {
   width: 100%;
-  padding: 1rem;
+  padding: 0.6rem;
   border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
   border: none;
   cursor: pointer;
   background: rgb(102, 101, 101);
-  font-size: 1.2rem;
+  color: rgba(212, 212, 212);
+  font-size: 1.5rem;
   font-weight: bold;
 }
 .voteButton:hover {
   background: rgb(204, 182, 182);
+  color: rgb(71, 70, 70);
 }
 .votedPuppyButton {
   width: 100%;
@@ -42,18 +42,38 @@
   border-bottom-right-radius: 8px;
   border: none;
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: rgb(71, 70, 70);
   background: rgb(204, 182, 182);
+}
+.votedPuppyButton:hover {
+  background: rgb(102, 101, 101);
+  color: rgba(212, 212, 212);
 }
 .voteButton:focus {
   outline: none;
 }
 .imgContainer {
+  height: 400px;
   position: relative;
 }
 .cardDetails {
+  background: rgba(32, 32, 32, 0.8);
+  color: rgb(255, 255, 255);
+  transition: all 500ms;
   position: absolute;
+  font-weight: bold;
   bottom: 0;
-  color: red;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.container:hover .cardDetails {
+  transition: all 500ms;
+  opacity: 1;
 }
