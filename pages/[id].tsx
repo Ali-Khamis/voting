@@ -38,7 +38,6 @@ export const PuppyPage: React.FC<PuppyPageProps> = ({
 
 export default PuppyPage;
 
-// This function gets called at build time
 export async function getStaticPaths() {
   let ids: string[];
   await db
@@ -56,7 +55,6 @@ export async function getStaticPaths() {
   return { paths, fallback: false };
 }
 
-// This also gets called at build time
 export const getStaticProps: getStaticPropsFunction = async (args) => {
   let puppyInfo: PuppyInfo;
   await db

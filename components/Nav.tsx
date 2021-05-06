@@ -1,8 +1,5 @@
 import navStyles from "../styles/Nav.module.css";
 import Link from "next/link";
-import firebase from "firebase/app";
-// import { auth } from "../firebase";
-// import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { InitialState, HandleSignOut } from "../types";
 import { removeUserInfo } from "../reducers&stone/UserInfoSlice";

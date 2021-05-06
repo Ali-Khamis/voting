@@ -27,7 +27,6 @@ type HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => void;
 type SignInAndSignUpFunction = (email: strign, password: stirng) => any;
 type ResetPasswordFunction = (email: strign) => any;
 type HandleImageClick = (id: string) => void;
-// reducer state
 
 interface ImagesListProps {
   handleImageClick: (id: string) => void;

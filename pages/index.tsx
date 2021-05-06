@@ -96,7 +96,6 @@ const Home = ({ images }: HomeProps) => {
         imageVotedId: id,
       })
     );
-    //
     db.collection("Images")
       .doc(id)
       .get()
