@@ -15,6 +15,7 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
   if (totalVoters > 0) {
     votePresentage = Math.round((imageInfo.voters.length / totalVoters) * 100);
   }
+
   useEffect(() => {
     if (localState.userInfo.imageVotedId === imageInfo.Id) {
       setVoted(true);
@@ -44,22 +45,26 @@ const ImageListItem: React.FC<ImageListItemProps> = ({
                 <span>For more information about the puppy click here </span>
               </div>
             </div>
-            <div className={imageStyles.details}>
-              <h1>%{votePresentage}</h1>
-              <h1>Voters: {imageInfo.voters.length}</h1>
-            </div>
+            {localState.userInfo.imageVotedId && (
+              <div className={imageStyles.details}>
+                <h1>%{votePresentage}</h1>
+                <h1>Voters: {imageInfo.voters.length}</h1>
+              </div>
+            )}
           </div>
         </Link>
-        <button
-          onClick={() => handleImageClick(imageInfo.Id)}
-          className={
-            !voted
-              ? `${imageStyles.voteButton}`
-              : ` ${imageStyles.voteButton} ${imageStyles.votedPuppyButton}`
-          }
-        >
-          {voted ? "Unvote" : "Vote"}
-        </button>
+        {localState.userInfo.emailVerified && (
+          <button
+            onClick={() => handleImageClick(imageInfo.Id)}
+            className={
+              !voted
+                ? `${imageStyles.voteButton}`
+                : ` ${imageStyles.voteButton} ${imageStyles.votedPuppyButton}`
+            }
+          >
+            {voted ? "Unvote" : "Vote"}
+          </button>
+        )}
       </div>
     </>
   );

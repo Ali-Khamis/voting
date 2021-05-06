@@ -1,78 +1,78 @@
 import navStyles from "../styles/Nav.module.css";
 import Link from "next/link";
-import { auth } from "../firebase";
+import firebase from "firebase/app";
+// import { auth } from "../firebase";
 // import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { UserState, HandleSignOut } from "../types";
+import { InitialState, HandleSignOut } from "../types";
 import { removeUserInfo } from "../reducers&stone/UserInfoSlice";
 import SignOut from "./SignOut";
+import useUser from "../firbase/useUser";
 
 const Nav = () => {
-  // const [isUserLogged, setIsUserLogged] = useState<boolean>(false);
-  const userLocalInfo: any = useSelector((state: UserState) => state);
-  console.log(userLocalInfo.userInfo);
-
+  const userLocalInfo = useSelector((state: InitialState) => state.userInfo);
   const dispatch = useDispatch();
-  // auth.onAuthStateChanged((user) => {
-  //   if (user) {
-  //     setIsUserLogged(true);
-  //   } else {
-  //     setIsUserLogged(false);
-  //   }
-  // });
+  const { logout } = useUser();
   const handleSignOut: HandleSignOut = () => {
-    auth.signOut();
+    logout();
     dispatch(removeUserInfo());
   };
   return (
-    <nav className={navStyles.container}>
-      <div className={navStyles.nav}>
-        {userLocalInfo.userInfo.id ? (
-          <div className={navStyles.userInfosContainer}>
-            {userLocalInfo.userInfo.profileImgUrl && (
-              <img
-                src={userLocalInfo.userInfo.profileImgUrl}
-                className={navStyles.profileImage}
-                alt="User profile picture"
-              />
-            )}
-            <div>
-              <p className={navStyles.userInfo}>
-                {userLocalInfo.userInfo.name}
-              </p>
-              <p className={navStyles.userInfo}>
-                {userLocalInfo.userInfo.email}
-              </p>
+    <div>
+      <nav className={navStyles.container}>
+        <div className={navStyles.nav}>
+          {userLocalInfo.id ? (
+            <div className={navStyles.userInfosContainer}>
+              {userLocalInfo.profileImgUrl && (
+                <img
+                  src={userLocalInfo.profileImgUrl}
+                  className={navStyles.profileImage}
+                  alt="User profile picture"
+                />
+              )}
+              <div>
+                <p className={navStyles.userInfo}>{userLocalInfo.name}</p>
+                <p className={navStyles.userInfo}>{userLocalInfo.email}</p>
+              </div>
             </div>
-          </div>
-        ) : (
-          <div></div>
-        )}
-        <ul className={navStyles.ul}>
-          {userLocalInfo.userInfo.id ? (
-            <>
-              <li className={navStyles.li}>
-                <Link href="/">Home</Link>
-              </li>
-              <li className={navStyles.li}>
-                <Link href="/Login" passHref>
-                  <SignOut onClick={handleSignOut} href={"s"} ref={() => {}} />
-                </Link>
-              </li>
-            </>
           ) : (
-            <>
-              <li className={navStyles.li}>
-                <Link href="/Login">Login</Link>
-              </li>
-              <li className={navStyles.li}>
-                <Link href="/SignUp">SignUp</Link>
-              </li>
-            </>
+            <div></div>
           )}
-        </ul>
-      </div>
-    </nav>
+          <ul className={navStyles.ul}>
+            {userLocalInfo.id ? (
+              <>
+                <li className={navStyles.li}>
+                  <Link href="/">Home</Link>
+                </li>
+                <li className={navStyles.li}>
+                  <Link href="/Login" passHref>
+                    <SignOut
+                      onClick={handleSignOut}
+                      href={"s"}
+                      ref={() => {}}
+                    />
+                  </Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li className={navStyles.li}>
+                  <Link href="/Login">Login</Link>
+                </li>
+                <li className={navStyles.li}>
+                  <Link href="/SignUp">SignUp</Link>
+                </li>
+              </>
+            )}
+          </ul>
+        </div>
+      </nav>
+      {userLocalInfo.id && !userLocalInfo.emailVerified && (
+        <div className={navStyles.emailVerifing}>
+          Check your inbox to verify your email then refresh the page
+        </div>
+      )}
+    </div>
   );
 };
 export default Nav;

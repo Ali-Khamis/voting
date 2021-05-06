@@ -56,3 +56,8 @@
 .li a:hover {
   color: rgb(255, 255, 255);
 }
+.emailVerifing {
+  text-align: center;
+  border: 1px solid black;
+  background: yellow;
+}

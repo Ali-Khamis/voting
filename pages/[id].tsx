@@ -1,22 +1,37 @@
-import { db } from "../firebase";
+import { db } from "../components/auth/FirebaseAuth";
+import {
+  PuppyInfo,
+  getStaticPropsFunction,
+  PuppyPageProps,
+  SnapShotType,
+  DbImage,
+} from "../types";
+import Styles from "../styles/Id.module.css";
+import { useRouter } from "next/router";
 
-export interface TestProps {
-  puppyInfo: { puppyName: string; puppyImageUrl: string };
-}
-
-const PuppyPage: React.FC<TestProps> = ({
+export const PuppyPage: React.FC<PuppyPageProps> = ({
   puppyInfo: { puppyName, puppyImageUrl },
 }) => {
+  const router = useRouter();
   return (
-    <div>
-      <h1>{puppyName}</h1>
-      <img src={puppyImageUrl} alt="puppy image" />
-      <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
-        aspernatur dolorem fugit voluptas quibusdam facere reiciendis, sequi
-        iste culpa expedita dolorum a dolor rerum ducimus laboriosam cumque
-        distinctio alias! Accusamus.
-      </p>
+    <div className={Styles.container}>
+      <div className={Styles.content}>
+        <h1 className={Styles.puppyName}>{puppyName}</h1>
+        <img
+          src={puppyImageUrl}
+          className={Styles.img}
+          width={400}
+          height={300}
+          alt="puppy image"
+        />
+        <p>
+          <span className={Styles.firstWord}>Lodem</span> ipsum dolor sit amet
+          consectetur adipisicing elit. Cupiditate aspernatur dolorem fugit
+          voluptas quibusdam facere reiciendis, sequi iste culpa expedita
+          dolorum a dolor rerum ducimus laboriosam cumque distinctio alias!
+          Accusamus.
+        </p>
+      </div>
     </div>
   );
 };
@@ -30,7 +45,10 @@ export async function getStaticPaths() {
     .collection("Images")
     .get()
     .then((snapshot) => {
-      ids = snapshot.docs.map((image) => image.data().Id);
+      ids = snapshot.docs.map((image: SnapShotType) => {
+        const data: DbImage = image.data();
+        return data.Id;
+      });
     });
   const paths = await ids.map((id) => ({
     params: { id },
@@ -39,20 +57,21 @@ export async function getStaticPaths() {
 }
 
 // This also gets called at build time
-export async function getStaticProps({ params }) {
-  let puppyInfo: { puppyName: string; puppyImageUrl: string };
+export const getStaticProps: getStaticPropsFunction = async (args) => {
+  let puppyInfo: PuppyInfo;
   await db
     .collection("Images")
-    .doc(params.id)
+    .doc(args.params.id)
     .get()
-    .then((snapshot) => {
+    .then((snapshot: SnapShotType) => {
+      const data: DbImage = snapshot.data();
       puppyInfo = {
-        puppyName: snapshot.data().name,
-        puppyImageUrl: snapshot.data().ImageUrl,
+        puppyName: data.name,
+        puppyImageUrl: data.ImageUrl,
       };
     });
 
   return {
     props: { puppyInfo },
   };
-}
+};

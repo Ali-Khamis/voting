@@ -11,3 +11,7 @@
   gap: 2rem;
   margin: 2rem 0;
 }
+.didNotVoteNotice {
+  text-align: center;
+  color: rgb(216, 78, 78);
+}

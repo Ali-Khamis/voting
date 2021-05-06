@@ -2,16 +2,18 @@ import store from "../reducers&stone/store";
 import { Provider } from "react-redux";
 import Layout from "../components/Layout";
 import "../styles/global.css";
-// import { AuthProvider } from "../auth";
-function MyApp({ Component, pageProps }) {
+import LoggedInUserCheck from "../components/LoggedInUserCheck";
+import { AppProps } from "next/app";
+
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    // <AuthProvider>
     <Provider store={store}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <LoggedInUserCheck>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </LoggedInUserCheck>
     </Provider>
-    // </AuthProvider>
   );
 }
 
