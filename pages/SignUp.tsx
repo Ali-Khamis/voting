@@ -31,14 +31,14 @@ const SignUp: React.FC = () => {
   const signup: SignInAndSignUpFunction = (email, passowrd) => {
     return firebase.auth().createUserWithEmailAndPassword(email, passowrd);
   };
-  const handleSubmit: HandleSubmit = async (e) => {
+  const handleSubmit: HandleSubmit = (e) => {
     e.preventDefault();
     if (passowrd === passowrdConfirmation) {
       try {
         setError("");
         setLoading(true);
 
-        await signup(email, passowrd)
+        signup(email, passowrd)
           .then(async (result) => {
             setEmail("");
             setPassword("");
