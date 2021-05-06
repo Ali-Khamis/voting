@@ -129,8 +129,6 @@ const Home = ({ images }: HomeProps) => {
     }
   };
 
-  console.log(localState.userInfo);
-
   return (
     <div className={homeStyles.container}>
       <Head>
