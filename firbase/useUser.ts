@@ -18,7 +18,9 @@ const useUser = () => {
       .then(() => {
         router.push("/Login");
       })
-      .catch((e) => {});
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   useEffect(() => {
