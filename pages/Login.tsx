@@ -56,7 +56,9 @@ const Login: React.FC = () => {
       .then(() => {
         router.push("/");
       })
-      .catch((err: Error) => {});
+      .catch((err: Error) => {
+        console.log(err);
+      });
   };
   const handlePasswordEyeClicked = () => {
     setPasswordEyeClicked(!passwordEyeClicked);

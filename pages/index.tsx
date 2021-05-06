@@ -88,7 +88,8 @@ const Home = ({ images }: HomeProps) => {
         db.collection("Images").doc(id).update({
           voters,
         });
-      });
+      })
+      .catch((e) => console.log(e));
   };
   const unVoteForImage: VoteFunction = (id) => {
     dispatch(
@@ -107,7 +108,8 @@ const Home = ({ images }: HomeProps) => {
         db.collection("Images").doc(id).update({
           voters,
         });
-      });
+      })
+      .catch((e) => console.log(e));
   };
   const voteForDifferentImage: VoteForDifferentImage = (
     oldImageId,
@@ -168,7 +170,8 @@ export const getStaticProps = async () => {
         const newImage: DbImage = image.data();
         images = [...images, newImage];
       });
-    });
+    })
+    .catch((e) => console.log(e));
 
   return { props: { images } };
 };

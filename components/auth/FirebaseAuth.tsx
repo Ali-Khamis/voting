@@ -25,7 +25,9 @@ const FirebaseAuth = () => {
           .then(() => {
             router.push("/");
           })
-          .catch((err: Error) => {});
+          .catch((err: Error) => {
+            console.log(err);
+          });
       }}
     >
       FireBaseAuth (About Page)

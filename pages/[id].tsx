@@ -48,6 +48,9 @@ export async function getStaticPaths() {
         const data: DbImage = image.data();
         return data.Id;
       });
+    })
+    .catch((e) => {
+      console.log(e);
     });
   const paths = await ids.map((id) => ({
     params: { id },
@@ -67,6 +70,9 @@ export const getStaticProps: getStaticPropsFunction = async (args) => {
         puppyName: data.name,
         puppyImageUrl: data.ImageUrl,
       };
+    })
+    .catch((e) => {
+      console.log(e);
     });
 
   return {
